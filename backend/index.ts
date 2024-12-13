@@ -1,39 +1,25 @@
 import express, {Express, Request, Response } from 'express'
 import dotenv from 'dotenv'
 import bodyParser from 'body-parser'
-import { helloWorldController } from './controllers/helloWorldController'
-import { myPostController  } from './controllers/myPostController'
-import { multiplyController  } from './controllers/multiplyController'
-import { numberValidationMiddleware } from './middleware/numberValidationMiddleware'
-import { authentication } from './middleware/authentication'
-import { createEmployeeController, deleteEmployeeController, getSingleEmployeeController, getAllEmployeesController, updateEmployeeController } from './controllers/employeeController'
+import cors from 'cors'
 import mongoose from 'mongoose'
+import { getAllBlogPostsController, getIndividualBlogPostController, createBlogPostController, updateBlogPostController, deleteBlogPostController } from './controllers'
 
 dotenv.config() 
 
 const app: Express = express() 
 const port = 3001 
 
+// body parser and cors - middleware
 app.use(bodyParser())
+app.use(cors())
 
-app.get('/employee', getSingleEmployeeController)
-app.get('/employees', getAllEmployeesController)
-app.post('/create-employee', createEmployeeController)
-app.post('/update-employee', updateEmployeeController)
-app.delete('/delete-employee', deleteEmployeeController)
+app.get('/get-blogpost', getIndividualBlogPostController)
+app.get('/get-all', getAllBlogPostsController)
+app.post('/create-blogpost', createBlogPostController)
+app.post('/update-blogpost', updateBlogPostController)
+app.delete('/delete-blogpost', deleteBlogPostController)
 
-app.get('/', helloWorldController)
-
-app.post('/add', authentication, numberValidationMiddleware, myPostController)
-app.post('/multiply', authentication, numberValidationMiddleware, multiplyController)
-
-app.get('/json', (req: Request, res: Response) => {
-    console.log(req.query)
-
-    res.send({
-        hello: 'world'
-    })
-})
 
 // connect to mongoose
 mongoose.connect(process.env.CONNECTION_STRING!).then(() => {
@@ -41,5 +27,6 @@ mongoose.connect(process.env.CONNECTION_STRING!).then(() => {
         console.log(`App listening on port ${port}`)
     })
 }).catch(e => {
+    // if mongoose connection isn't successful
     console.log('connection failed')
 })

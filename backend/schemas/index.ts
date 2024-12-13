@@ -1,1 +1,1 @@
-export * from './employeeSchema'
+export * from './blogPostSchema'
