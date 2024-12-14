@@ -1,2 +1,2 @@
-export * from './PokemonView'
-export * from './PokemonController'
+export * from './BlogPostView'
+export * from './BlogPostController'
